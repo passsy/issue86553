@@ -1,0 +1,22 @@
+FROM dart:2.19 AS build
+# Copy shared submodule package
+WORKDIR /app
+COPY pubspec.* ./
+COPY /.dockerize_build/ ./bin/
+COPY /lib/ ./lib/
+
+RUN dart pub get
+# Ensure packages are still up-to-date if anything has changed
+RUN dart pub get --offline
+RUN dart compile exe bin/main.dart -o bin/server
+# Build minimal serving image from AOT-compiled `/server` and required system
+# libraries and configuration files stored in `/runtime/` from the build stage.
+FROM scratch
+# Copy runtime from build image
+COPY --from=build /runtime/ /
+COPY --from=build /app/bin/server /bin/
+COPY /www ./www
+ENV APP_DIRECTORY=www
+# Start server.
+EXPOSE 8080
+CMD ["bin/server"]

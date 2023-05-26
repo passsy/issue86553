@@ -1,0 +1,21 @@
+name: cli_sidekick
+description: Sidekick CLI for cli
+version: 0.0.1
+publish_to: none
+
+environment:
+  sdk: '>=2.18.6 <3.0.0'
+
+executables:
+  main:
+
+dependencies:
+  dockerize_sidekick_plugin: ^0.6.0
+  sidekick_core: ^1.3.0
+
+dev_dependencies:
+  lint: '>=1.5.3 <3.0.0'
+
+# generated code, do not edit this manually
+sidekick:
+  cli_version: 1.3.0
